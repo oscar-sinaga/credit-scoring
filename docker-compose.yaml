@@ -1,21 +1,25 @@
-name: air_quality_prediction
+name: npl_prediction
 services:
   streamlit:
     build: 
       context: .
       dockerfile: ./docker/streamlit/Dockerfile
-    image: cbagusjk/ml_process_streamlit
+    image: oscar/ml_process_streamlit
     container_name: streamlit_frontend
     depends_on:
       - api
     ports:
       - 8501:8501
+    volumes:
+      - ./:/home/
 
   api:
     build: 
       context: .
       dockerfile: ./docker/api/Dockerfile
-    image: cbagusjk/ml_process_api
+    image: oscar/ml_process_api
     container_name: api_backend
     ports:
       - 8088:8080
+    volumes:
+      - ./:/home/

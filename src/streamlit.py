@@ -1,6 +1,6 @@
 import streamlit as st
 import requests
-from PIL import Image
+#from PIL import Image
 
 
 # Load and set images in the first place
@@ -109,7 +109,7 @@ with st.form(key = "air_data_form"):
 
         # Create loading animation while predicting
         with st.spinner("Sending data to prediction server ..."):
-            res = requests.post("http://localhost:8080/predict", json = raw_data).json()
+            res = requests.post("http://api_backend:8080/predict", json = raw_data).json()
 
         # Parse the prediction result
         if res["error_msg"] != "":
