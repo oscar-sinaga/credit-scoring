@@ -1,0 +1,10 @@
+*.ipynb_checkpoints
+*__pycache__
+/data/preprocessed/
+/venv_win/
+/venv_linux/
+/venv_api/
+/venv_streamlit/
+/docs/site/
+/venv
+/models

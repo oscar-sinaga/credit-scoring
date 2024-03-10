@@ -1,0 +1,123 @@
+# Path related
+raw_dataset_dir: data/raw/
+train_set_path:
+- data/processed/x_train.pkl
+- data/processed/y_train.pkl
+valid_set_path:
+- data/processed/x_valid.pkl
+- data/processed/y_valid.pkl
+test_set_path:
+- data/processed/x_test.pkl
+- data/processed/y_test.pkl
+train_feng_set_path:
+- data/processed/x_train_feng.pkl
+- data/processed/y_train_feng.pkl
+valid_feng_set_path:
+- data/processed/x_valid_feng.pkl
+- data/processed/y_valid_feng.pkl
+test_feng_set_path:
+- data/processed/x_test_feng.pkl
+- data/processed/y_test_feng.pkl
+raw_dataset_path: data/processed/raw_dataset.pkl
+cleaned_raw_dataset_path: data/processed/raw_dataset.pkl
+production_model_path: models/production_model.pkl
+ohe_path: models
+le_encoder_path: models/le_encoder.pkl
+training_log_path: log/training_log.json
+
+# Debug related
+print_debug: true
+
+# Columns by data type related
+
+int64_columns:
+- monthly_income
+- num_of_dependent
+- lama_bekerja
+- otr
+- tenor
+- dp
+float_columns:
+- monthly_income_log
+- num_of_dependent_log
+- lama_bekerja_log
+object_columns:
+- housing_type
+- status_pernikahan
+- pekerjaan
+- NPL
+
+# Predictors and label related
+label: NPL
+predictors:
+- monthly_income
+- housing_type
+- num_of_dependent
+- lama_bekerja
+- otr
+- status_pernikahan
+- pekerjaan
+- tenor
+- dp
+- monthly_income_log
+- num_of_dependent_log
+- lama_bekerja_log
+
+# Range of data related
+range_housing_type:
+- milik orang tua
+- milik sendiri
+- kos
+- milik pasangan
+- kontrak
+range_status_pernikahan:
+- Belum Nikah
+- Nikah
+range_pekerjaan :
+- Wiraswasta
+- Profesional
+- Karyawan Swasta
+- PNS
+- Buruh
+- Ibu Rumah Tangga/Pensiunan/Mahasiswa/Lainnya
+range_monthly_income:
+- 21664620 
+- 105000000
+range_num_of_dependent:
+- 0
+- 14
+range_lama_bekerja:
+- 0
+- 14
+range_otr:
+- 500000000 
+- 7000000000
+range_tenor:
+- 12 
+- 48
+range_dp:
+- 0
+- 7000000000
+range_monthly_income_log:
+- 16.891191119349774
+- 18.46947091764561
+range_num_of_dependent_log:
+- 0.0
+- 2.70805020110221
+range_lama_bekerja_log:
+- 0.0
+- 1.6094379124341003
+
+label_categories:
+- Ya
+- Tidak
+
+columns_being_logtransformed:
+- monthly_income
+- num_of_dependent
+- lama_bekerja
+
+columns_logtransformed:
+- monthly_income_log
+- num_of_dependent_log
+- lama_bekerja_log
