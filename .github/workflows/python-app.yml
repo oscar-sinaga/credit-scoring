@@ -16,7 +16,7 @@ jobs:
     - uses: actions/checkout@v3
       with:
         lfs: True
-    - name: Set up Python 3.11.5-slim
+    - name: Set up Python 3.11.5d
       uses: actions/setup-python@v3
       with:
         python-version: "3.11.5-slim"
