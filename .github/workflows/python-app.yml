@@ -1,3 +1,6 @@
+# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
+
 name: Python application
 
 on:
@@ -10,49 +13,58 @@ permissions:
   contents: read
 
 jobs:
-  docker-compose-build:
+  build:
+
     runs-on: ubuntu-latest
+
     steps:
     - uses: actions/checkout@v3
-      with:
-        lfs: True
     - name: Set up Python 3.11.5
       uses: actions/setup-python@v3
       with:
         python-version: "3.11.5"
-    - name: Login to Docker Hub
-      uses: docker/login-action@v2
-      with:
-        username: ${{ secrets.DOCKER_HUB_USER }}
-        password: ${{ secrets.DOCKER_HUB_TOKEN }}
-    - name: Docker Compose Build and Push
-      run: |
-        docker compose build
-        docker compose push
-  
-  docker-pull-ec2:
-    needs: docker-compose-build
+
+  docker-pull-ec-2:
+    needs: build
+
     runs-on: ubuntu-latest
+
     steps:
-    - name: Creating SSH Configuration File
+    - name: Creating a SSH Configuration File
       env:
         SSH_USER: ${{ secrets.SSH_USER }}
         SSH_KEY: ${{ secrets.SSH_KEY }}
         SSH_HOST: ${{ secrets.SSH_HOST }}
-        DOCKER_USER: ${{ secrets.DOCKER_HUB_USER }}
+
       run: |
         mkdir -p ~/.ssh/
         echo "$SSH_KEY" > ~/.ssh/deployment.pem
         chmod 600 ~/.ssh/deployment.pem
-        cat >> ~/.ssh/config <<END
+        cat >> ~/.ssh/config << END
         Host deploy_ec2
           HostName $SSH_HOST
           User $SSH_USER
           IdentityFile ~/.ssh/deployment.pem
           StrictHostKeyChecking no
         END
+
     - name: Deploy to EC2
+      env:
+        PATH_FILE: credit-scoring
+        API_SERVICE_IMAGE: api_backend
+        STREAMLIT_SERVICE_IMAGE: streamlit_frontend
+
       run: |
-        ssh deploy_ec2 "rm docker-compose.yaml"
-        ssh deploy_ec2 "wget https://raw.githubusercontent.com/oscar-sinaga/credit-scoring/main/docker-compose.yaml"
-        ssh deploy_ec2 "sudo docker compose pull && sudo docker compose up -d"
+          ssh deploy_ec2 "mkdir temp"
+          ssh deploy_ec2 "git clone https://github.com/oscar-sinaga/credit-scoring.git temp"
+          ssh deploy_ec2 "rsync -a temp/ $PATH_FILE"
+          ssh deploy_ec2 "rm -rf temp"
+          ssh deploy_ec2 "cd $PATH_FILE"
+          ssh deploy_ec2 "cd $PATH_FILE && sudo docker compose down"
+          ssh deploy_ec2 "cd $PATH_FILE || sudo docker rmi $API_SERVICE_IMAGE -f || sudo docker rmi $STREAMLIT_SERVICE_IMAGE -f"
+          ssh deploy_ec2 "cd $PATH_FILE && sudo docker compose build && sudo docker compose up -d"
+          
+          
+
+        
+    
