@@ -1,4 +1,4 @@
-name: npl_prediction
+name: npl-prediction
 services:
   streamlit:
     build: 
